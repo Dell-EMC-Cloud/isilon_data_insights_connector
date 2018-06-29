@@ -1,0 +1,13 @@
+[Unit]
+Description=Isilon Data Insights Connector
+
+[Service]
+Type=forking
+PIDFile=/opt/isilon_data_insights_connector/isi_data_insights_d.pid
+ExecStart=/opt/isilon_data_insights_connector/bin/start_isiconnector_service.sh
+ExecStop=/opt/isilon_data_insights_connector/bin/stop_isiconnector_service.sh
+
+[Install]
+WantedBy=multi-user.target
+Alias=isiconnector.service
+ 
