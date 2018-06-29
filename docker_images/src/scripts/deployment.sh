@@ -33,25 +33,44 @@ DeployIsilonConnector()
 		exit 1
 	fi
 
-	echo -n "Enter the full path name of the Isilon connector docker image tar file: "
-	read ImageFile
-	if [ -z $ImageFile ]
+	echo -n "Do you want to pull the image, load a local image, or is image loaded? Enter pull or load or skip: "
+	read action
+	if [ -z $action ]
 	then
-		echo "No image file name. Deployment cancelled..."
+		echo "Try again and enter pull to download, load to use local tar file, or skip to use loaded image."
 		exit 1
 	fi
 
-	echo "Loading Isilon connector image"
-	RunDockerCmd load -i $ImageFile
-	IMAGEID=`RunDockerCmd images | grep isi-connector | awk '{print $3}'`
+	if [ "$action" == "pull" ]
+	then
+		sudo docker pull emccorp/isilon-data-insights-connector:1.0.0
+	elif [ "$action" == "load" ]
+	then
+		echo -n "Enter the full path name of the Isilon connector docker image tar file: "
+		read ImageFile
+		if [ -z $ImageFile ]
+		then
+			echo "No image file name. Deployment cancelled..."
+			exit 1
+		fi
+
+		echo "Loading Isilon connector image"
+		RunDockerCmd load -i $ImageFile
+	elif [ "$action" != "skip" ]
+	then
+		echo "Try again and enter pull to download, load to use local tar file, or skip to use loaded image."
+		exit 1
+	fi
+
+	IMAGEID=`RunDockerCmd images | grep isilon-data-insights-connector | awk '{print $3}'`
 	[[ -z "$IMAGEID" ]] && { echo "Failed to load Isilon connector image";  Usage; }
     
 	echo "Start the Isilon connector container."
 	mkdir -p /data/influxdb
 	/bin/bash run_isiconnector_container.sh
 
-	CONTAINERID=`RunDockerCmd ps -a | grep isi-connector | awk '{print $1}'`
-	[[ -z "$CONTAINERID" ]] && { echo "Cannot determine container ID for isi-connector"; Usage; }
+	CONTAINERID=`RunDockerCmd ps -a | grep isilon-data-insights-connector | awk '{print $1}'`
+	[[ -z "$CONTAINERID" ]] && { echo "Cannot determine container ID for isilon-data-insights-connector"; Usage; }
 
 	echo "Enter the IP address of an Isilon node: "
 	read IsilonIP

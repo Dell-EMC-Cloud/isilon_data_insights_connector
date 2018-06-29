@@ -7,7 +7,7 @@
 # limited to the terms and conditions of the License Agreement under which
 # it is provided by or on behalf of Dell EMC.
 #
-# DESCRIPTION:    docker image called 'cloud-collector' containing Isilon Insights Data connector and GCP stats collector
+# DESCRIPTION:    docker image called 'isilon-data-insights-connector' containing Isilon Data Insights connector
 #
 
 FROM centos:7

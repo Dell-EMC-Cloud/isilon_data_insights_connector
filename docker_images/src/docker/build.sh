@@ -29,9 +29,8 @@ chmod 755 artifacts/isilon_data_insights_connector/*.py
 
 # Build docker image and save
 mkdir -p build
-docker build -t isi-connector:$VERSION --file Dockerfile --force-rm .
+docker build -t emccorp/isilon-data-insights-connector:$VERSION --file Dockerfile --force-rm .
 
-docker save --output build/isi-connector.$VERSION.tar isi-connector:$VERSION
-pixz -e9 -i build/isi-connector.$VERSION.tar -o build/isi-connector.$VERSION.txz
-#mv build/isi-connector.$VERSION.* ../../images/.
+docker save --output build/isilon-data-insights-connector.$VERSION.tar emccorp/isilon-data-insights-connector:$VERSION
+pixz -e9 -i build/isilon-data-insights-connector.$VERSION.tar -o build/isilon-data-insights-connector.$VERSION.txz
 
